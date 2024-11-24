@@ -22,6 +22,7 @@ import java.util.List;
 public class GestaoVendasTratamentoExcecao extends ResponseEntityExceptionHandler {
 
     public static final String NOT_BLANK = "NotBlank";
+    public static final String NOT_NULL = "NotNull";
     public static final String LENGTH = "Length";
 
     @Override
@@ -48,7 +49,7 @@ public class GestaoVendasTratamentoExcecao extends ResponseEntityExceptionHandle
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<Object> handleDataIntegrityViolationException(DataIntegrityViolationException ex, WebRequest request) {
-        String mensagemUsuario = ex.getMessage();
+        String mensagemUsuario = "Recurso não encontrado.";
         String mensagemDesenvolvedor = ex.getMessage();
         List<Erro> erros = Arrays.asList(new Erro(mensagemUsuario, mensagemDesenvolvedor));
         return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);

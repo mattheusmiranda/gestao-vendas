@@ -21,23 +21,38 @@ public class ProdutoControlador {
     @Autowired
     private ProdutoServico produtoServico;
 
-    @Operation(summary = "Listar")
     @GetMapping
+    @Operation(summary = "Listar")
     public List<Produto> listaTodas(@PathVariable Long codigoCategoria) {
         return produtoServico.listarTodos(codigoCategoria);
     }
 
-    @Operation(summary = "Listar por código")
     @GetMapping("/{codigo}")
+    @Operation(summary = "Listar por código")
     public ResponseEntity<Optional<Produto>> buscarPorId(@PathVariable Long codigoCategoria, @PathVariable Long codigo) {
         Optional<Produto> produto = produtoServico.buscarPorCodigo(codigo, codigoCategoria);
         return produto.isPresent() ? ResponseEntity.ok(produto) : ResponseEntity.notFound().build();
     }
 
-    @Operation(summary = "Salvar", description = "Cria um novo produto")
     @PostMapping
-    public ResponseEntity<Produto> salvar(@Valid @RequestBody Produto produto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(produtoServico.salvar(produto));
+    @Operation(summary = "Salvar", description = "Cria um novo produto")
+    public ResponseEntity<Produto> salvar(@PathVariable Long codigoCategoria, @Valid @RequestBody Produto produto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(produtoServico.salvar(codigoCategoria, produto));
+    }
+
+    @PutMapping("/{codigoCategoria}/{codigoProduto}")
+    @Operation(summary = "Atualizar", description = "Atualiza produto")
+    public ResponseEntity<Produto> atualizar(@PathVariable Long codigoCategoria,
+                                             @PathVariable Long codigoProduto,
+                                             @Valid @RequestBody Produto produto) {
+        return ResponseEntity.ok(produtoServico.atualicar(codigoCategoria, codigoProduto, produto));
+    }
+
+    @DeleteMapping("/{codigoProduto}")
+    @Operation(summary = "Deletar", description = "Deletar produto")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletar(@PathVariable Long codigoCategoria, @PathVariable Long codigoProduto) {
+        produtoServico.deletar(codigoCategoria, codigoProduto);
     }
 
 }

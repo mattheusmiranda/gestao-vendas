@@ -25,6 +25,10 @@ public class CategoriaServico {
         return categoriaRepositorio.findById(id);
     }
 
+    public Optional<Categoria> buscarPorCodigo(Long codigo) {
+        return Optional.ofNullable(categoriaRepositorio.findByCodigo(codigo));
+    }
+
     public Categoria salvar(Categoria categoria) {
         validarCategoriaDuplicada(categoria);
         return categoriaRepositorio.save(categoria);
